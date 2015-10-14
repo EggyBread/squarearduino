@@ -31,9 +31,9 @@ void setMotorLow() /* turns off signal pins to stepper motors to avoid overheati
   for (i = 4; i < 12; i++)
   {
     digitalWrite (i, LOW);
-//    Serial.println("set pin");
-//    Serial.println(i);
-//    Serial.println("low");
+    //    Serial.println("set pin");
+    //    Serial.println(i);
+    //    Serial.println("low");
   };
 };
 
@@ -52,49 +52,49 @@ void loop() {
   square2();
   diamond1();
   diamond2();
-  
-  
+
+
 }
 
 void square1()
 {
-    path(50, 0);
+  line(50, 0);
   setMotorLow();
   delay(500);
-  
-  path(0, 50);
-  setMotorLow();
-  delay(500);
-  
 
-  path(-50, 0);
+  line(0, 50);
   setMotorLow();
   delay(500);
-  
-  path(0, -50);
+
+
+  line(-50, 0);
+  setMotorLow();
+  delay(500);
+
+  line(0, -50);
   setMotorLow();
   delay(500);
 }
 
 void square2()
 {
-  path(0, 50);
+  line(0, 50);
   setMotorLow();
   delay(500);
-  
 
-  
-  path(50, 0);
+
+
+  line(50, 0);
   setMotorLow();
   delay(500);
-  
-  
-  path(0, -50);
+
+
+  line(0, -50);
   setMotorLow();
   delay(500);
-  
-  
-  path(-50, 0);
+
+
+  line(-50, 0);
   setMotorLow();
   delay(500);
 
@@ -102,75 +102,77 @@ void square2()
 
 void diamond1()
 {
-  path(50, 50);
+  line(50, 50);
   setMotorLow();
   delay(500);
-  
-  path(-50, 50);
+
+  line(-50, 50);
   setMotorLow();
   delay(500);
-  
-  
-  path(-50, -50);
+
+
+  line(-50, -50);
   setMotorLow();
   delay(500);
-  
-  path(50, -50);
+
+  line(50, -50);
   setMotorLow();
   delay(500);
 }
 
 void diamond2()
 {
-   path(-50, -50);
+  line(-50, -50);
   setMotorLow();
   delay(500);
-  
-  path(50, -50);
+
+  line(50, -50);
   setMotorLow();
   delay(500);
-  
-  
-  path(50, 50);
+
+
+  line(50, 50);
   setMotorLow();
   delay(500);
-  
-  path(-50, 50);
+
+  line(-50, 50);
   setMotorLow();
   delay(500);
 }
 
 
 
-void path(int xSteps, int ySteps)
+void line(long xSteps, long ySteps)
 {
-    int xProgress = 0,
-    yProgress = 0,
-    xDifference = 0,
-    yDifference = 0;
+  Serial.println("Moving " + String(xSteps) + " steps in X and " + String(ySteps) + " steps in Y.");
+  long xProgress = 0,
+       yProgress = 0,
+       xDifference = 0,
+       yDifference = 0;
 
-    int i;
-    
-    for (i = 0; i < 100; i++)
-    {
-        xDifference = (xSteps * i / 100) - xProgress;
-        yDifference = (ySteps * i / 100) - yProgress;
+  long i;
+  long j = 0;
+  Serial.print("j = ");
+  Serial.println(String(j));
+  j = sqrt( (xSteps * xSteps) + (ySteps * ySteps) );
 
-        StepperX.step(xDifference);
-        delay(3);
-        StepperY.step(yDifference);
-        delay(3);
-        setMotorLow();
+  Serial.print("j = ");
+  Serial.println(String(j));
 
-        xProgress += xDifference;
-        yProgress += yDifference;
-//        Serial.print("X Difference: ");
-//        Serial.println(xDifference);
-//        Serial.print("X Progress: ");
-//        Serial.println(xProgress);
-//        Serial.print("Y Difference: ");
-//        Serial.println(yDifference);
-//        Serial.print("Y Progress: ");
-//        Serial.println(yProgress);
-    }
+  j *= 10;
+
+  for (i = 0; i < j; i++)
+  {
+    xDifference = (xSteps * i / j) - xProgress;
+    yDifference = (ySteps * i / j) - yProgress;
+
+    StepperX.step(xDifference);
+    delay(1);
+    StepperY.step(yDifference);
+    delay(1);
+    setMotorLow();
+
+    xProgress += xDifference;
+    yProgress += yDifference;
+  }
 }
